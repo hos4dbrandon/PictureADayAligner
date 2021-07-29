@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(description='Make all face pictures level')
 parser.add_argument('--directory', required=True, help='Directory of project (contains folder with images and classification files)')
 parser.add_argument('--img_folder', required=True, help='Name of the folder containing images')
 parser.add_argument('--img_name', help='Name of test image')
-parser.add_argument('--make_video', required=True, help='Do you want to convert finished images into a video? T or F')
+parser.add_argument('--video', action='store_true', help='Do you want to convert finished images into a video?')
 args = parser.parse_args()
 
 numAlteredImages = 0
@@ -65,7 +65,7 @@ def processFolder(directory_path, img_folder, make_video):
         img_name = entry.path.split(os.sep)[-1]
         straightenImage(img_name, entry.path, directory_path, failed_path, face_cascade, eye_cascade, finished_path)
     
-    if(make_video=='T' or make_video == 'True'):
+    if(make_video):
         convertToVideo(finished_path)
 
 def straightenImage(img_name, img_path, directory, failed_path, face_cascade, eye_cascade, finished_path):
@@ -184,7 +184,7 @@ def straightenImage(img_name, img_path, directory, failed_path, face_cascade, ey
 
 
 if __name__ == '__main__':
-    processFolder(args.directory, args.img_folder, args.make_video)
+    processFolder(args.directory, args.img_folder, args.video)
     
 
 
