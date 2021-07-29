@@ -2,7 +2,7 @@
 Aligns face pictures using OpenCV 
 
 
-Need to install OpenCV in order for program to work.
+Need to install OpenCV and cv2 in order for program to work.
 
 Put images to be aligned in a folder
 
