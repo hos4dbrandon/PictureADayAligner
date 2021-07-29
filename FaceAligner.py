@@ -3,6 +3,7 @@ import numpy as np
 import os
 import argparse
 import glob
+import sys
 
 #create argparse
 parser = argparse.ArgumentParser(description='Make all face pictures level')
@@ -12,9 +13,13 @@ parser.add_argument('--img_name', help='Name of test image')
 parser.add_argument('--make_video', required=True, help='Do you want to convert finished images into a video? T or F')
 args = parser.parse_args()
 
+numAlteredImages = 0
+
 def convertToVideo(finished_path):
-    print("")
-    print("Generating Video", end="")
+    global numAlteredImages
+    print("Generating Video")
+    sys.stdout.write('['+' '*numAlteredImages+']  0%')
+    sys.stdout.flush()
     img_array = []
     for entry in os.scandir(finished_path):
         img = cv2.imread(entry.path)
@@ -23,9 +28,17 @@ def convertToVideo(finished_path):
         img_array.append(img)
     
     out = cv2.VideoWriter('PictureADay.mp4', 0x7634706d, 10.0, size)
+    count = 0
     for i in range(len(img_array)):
-        print(".")
         out.write(img_array[i])
+        sys.stdout.write('\b'*((numAlteredImages+5)-count) + '=')
+        if(count < (numAlteredImages - 1)):
+            sys.stdout.write('>')
+        sys.stdout.write(' '*((numAlteredImages-2)-count) + '] ' + str(int(((count+1)/numAlteredImages)*10)) + '0%')
+        sys.stdout.flush()
+        count+=1
+        
+    sys.stdout.write('\b\b\b\bDone!\n')
     out.release()
 
 def processFolder(directory_path, img_folder, make_video):
@@ -56,6 +69,7 @@ def processFolder(directory_path, img_folder, make_video):
         convertToVideo(finished_path)
 
 def straightenImage(img_name, img_path, directory, failed_path, face_cascade, eye_cascade, finished_path):
+    global numAlteredImages
     #loading the image
     img = cv2.imread(img_path)
     os.chdir(directory)
@@ -164,6 +178,7 @@ def straightenImage(img_name, img_path, directory, failed_path, face_cascade, ey
 
     cv2.imwrite(os.path.join(finished_path, newFilename),translated_image)
     print(newFilename +":","Done")
+    numAlteredImages+=1
 
 
 
