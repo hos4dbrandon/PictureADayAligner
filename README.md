@@ -2,7 +2,7 @@
 Aligns face pictures using OpenCV 
 
 
-Need to install OpenCV and cv2 in order for program to work.
+Need to install OpenCV, cv2 and dlib in order for program to work.
 
 Put images to be aligned in a folder
 
@@ -17,3 +17,6 @@ When running script, be sure to include the following required arguments:
 example: 
 
 python FaceAligner.py --directory C:\Users\hosfo\Documents\GitHub\PictureADayAligner --img_folder RawImages --video
+
+LIMITATIONS: Currently can't deal with multiple faces. If encounters image with 2 faces, will ignore that image.
+  TODO: Implement a GUI to select desired face if image with multiple faces encountered 
